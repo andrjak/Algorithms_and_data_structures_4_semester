@@ -1,0 +1,91 @@
+#include <iostream>
+
+using namespace std;
+
+int const MOD = 1000000007;
+int N, M;
+
+struct Matrix
+{
+	long array[101][101];
+};
+
+Matrix binMatrixPower(Matrix A, int L);
+Matrix matrixMul(Matrix A, Matrix B);
+
+int main()
+{
+	long result;
+	int U, V, L;
+	cin >> N;
+	cin >> M;
+	cin >> U;
+	cin >> V;
+	cin >> L;
+
+	Matrix start_matrix;
+
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			start_matrix.array[i][j] = 0;
+		}
+	}
+
+	int A, B;
+
+	for (int i = 0; i < M; i++)
+	{
+		cin >> A;
+		cin >> B;
+		start_matrix.array[A - 1][B - 1]++;
+		start_matrix.array[B - 1][A - 1]++;
+	}
+
+	start_matrix = binMatrixPower(start_matrix, L);
+	cout << start_matrix.array[U - 1][V - 1] % MOD;
+	cin >> A;
+	return 0;
+}
+
+Matrix matrixMul(Matrix A, Matrix B)
+{
+	Matrix C;
+
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+		{
+			C.array[i][j] = 0;
+    for (int v = 0; v < N; v++){
+				C.array[i][j] += (A.array[i][v] * B.array[v][j]) % MOD;
+    C.array[i][j] %= MOD;
+    }
+                     
+		}
+	return C;
+}
+
+
+Matrix binMatrixPower(Matrix A, int L) {
+	Matrix result;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			if (i == j)
+				result.array[i][j] = 1;
+			else
+				result.array[i][j] = 0;
+		}
+	}
+
+	while (L) {
+		if (L & 1)
+			result = matrixMul(result, A);
+		A = matrixMul(A, A);
+		L >>= 1;
+	}
+	return result;
+}
+

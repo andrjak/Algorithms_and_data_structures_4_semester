@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp9
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] N_and_M = newSplit(Console.ReadLine()).Select(Int32.Parse).ToArray();
+            int result = 0;
+            bool[] full = new bool[N_and_M[0]]; // Если i вершина соединена (true)
+
+            List<int>[] graph = new List<int>[N_and_M[0]];
+            for (int i = 0; i < N_and_M[0]; i++)
+                graph[i] = new List<int>();
+
+            for (int i = 0; i < N_and_M[1]; i++)
+            {
+                int[] rib = newSplit(Console.ReadLine()).Select(Int32.Parse).ToArray();
+                rib[0]--;
+                rib[1]--;
+                graph[rib[0]].Add(rib[1]);
+                graph[rib[1]].Add(rib[0]);
+            }
+
+            for (int index = 0; index < N_and_M[0]; index++)
+                if (!full[index])
+                {
+                    Walk(index, full, graph);
+                    result++;
+                }
+            
+            Console.WriteLine(ribDelete(result - 1, N_and_M[0], N_and_M[1]));
+            Console.ReadKey();
+        }
+
+        public static void Walk(int index, bool[] full, List<int>[] graph)
+        {
+            full[index] = true;
+            foreach (int item in graph[index])
+                if (!full[item]) // Если сосед не посещен
+                    Walk(item, full, graph);
+        }
+
+        public static int ribDelete(int result, int N, int M)
+        {
+            if (M - N + 1 >= 0 && result == 0)
+                return M - N + 1;
+            else
+                return -1;
+        }
+
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+    }
+
+}

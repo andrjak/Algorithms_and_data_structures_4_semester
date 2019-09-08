@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace ConsoleApp13
+{
+    class Program
+    {
+        static int N;
+        static int[] A;
+        static void Main(string[] args)
+        {
+            Preparation();
+            int position = 1;
+            long result = 0;
+            int adjustment = 0;
+
+            while (position < A.Length)
+            {
+                if (A[position] == A[position - 1])
+                    position += 1;
+                else if (A[position] != A[position - 1])
+                {
+                    if (A[position] < A[position - 1])
+                    {
+                        int localResult = searchMin(ref position);
+                        result += localResult;
+                        adjustment += localResult;
+                    }
+                    else
+                    {
+                        adjustment -= searchMax(ref position);
+                    }
+                }
+                if (adjustment < 0)
+                {
+                    result += (adjustment * -1);
+                    adjustment = 0;
+                }
+            }
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+
+        static void Preparation()
+        {
+            N = Convert.ToInt32(Console.ReadLine());
+            A = newSplit(Console.ReadLine()).Select(Int32.Parse).ToArray();
+        }
+
+        static int searchMin(ref int position)
+        {
+            int localResult = 0;
+            while (position < A.Length)
+            {
+                if (A[position] <= A[position - 1])
+                {
+                    localResult += (A[position - 1] - A[position]);
+                }
+                else break;
+                position++; 
+            }
+            return localResult;
+        }
+
+
+        static int searchMax(ref int position)
+        {
+            int localResult = 0;
+            while (position < A.Length)
+            {
+                if (A[position] >= A[position - 1])
+                {
+                    localResult += (A[position] - A[position - 1]);
+                }
+                else break;
+                position++;
+            }
+            return localResult;
+        }
+    }
+
+}

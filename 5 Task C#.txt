@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+//Алгоритм Дейкстры
+namespace ConsoleApp12
+{
+    class Program
+    {
+        static int N;
+        static int M;
+        static int STARTNODE = -1;
+        static int ENDNODE = -1;
+
+        static void Main(string[] args)
+        {
+            N = Convert.ToInt32(Console.ReadLine());
+            M = Convert.ToInt32(Console.ReadLine());
+            List<int[]>[] graph = new List<int[]>[N];
+            inputGraph(graph);
+            STARTNODE += Convert.ToInt32(Console.ReadLine());
+            ENDNODE += Convert.ToInt32(Console.ReadLine());
+            long[] nodeWeight = new long[N];
+            for (int i = 0; i < N; i++) nodeWeight[i] = long.MaxValue;
+            nodeWeight[STARTNODE] = 0;
+            bool[] flags = new bool[N];
+            SelectRelaxation(graph, nodeWeight, flags);
+            Console.WriteLine(nodeWeight[ENDNODE]);
+            Console.ReadKey();
+        }
+
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+
+        static void inputGraph(List<int[]>[] graph)
+        {
+            for (int i = 0; i < N; i++)
+                graph[i] = new List<int[]>();
+
+            int counter = 0;
+            int[] rib;
+            while (counter < M)
+            {
+                rib = newSplit(Console.ReadLine()).Select(Int32.Parse).ToArray();
+                graph[rib[0] - 1].Add(new int[] { rib[1] - 1, rib[2] });
+                graph[rib[1] - 1].Add(new int[] { rib[0] - 1, rib[2] });
+
+                ++counter;
+            }
+        }
+
+        static void Relaxation(List<int[]>[] graph, int selectNode, ref long[] nodeWeight)
+        {
+            for (int j = 0; j < graph[selectNode].Count; j++)
+            {
+                long neighbour = graph[selectNode][j][0];
+                long weight = graph[selectNode][j][1];
+                if (nodeWeight[selectNode] + weight < nodeWeight[neighbour])
+                    nodeWeight[neighbour] = nodeWeight[selectNode] + weight;
+            }
+        }
+
+        // Выбор вершины для релаксации 
+        static void SelectRelaxation(List<int[]>[] graph, long[] nodeWeight, bool[] flags)
+        {
+            for (int i = 0; i < N; i++)
+            {
+                int selectNode = -1;
+
+                for (int j = 0; j < N; j++)
+                {
+                    if (!flags[j])
+                    {
+                        if (selectNode == -1) selectNode = j;
+                        else if (nodeWeight[j] < nodeWeight[selectNode]) selectNode = j;
+                    }
+                }
+                flags[selectNode] = true;
+                Relaxation(graph, selectNode, ref nodeWeight);
+            }
+        }
+    }
+}

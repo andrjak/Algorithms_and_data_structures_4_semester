@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp8
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            char[] array = Console.ReadLine().ToArray();
+            bool flag = false;
+            bool swit = false;
+            int index = -1;
+
+            for (int i = array.Length - 2; i >= 0; i--)
+            {
+                for (int j = array.Length - 1; j > i; j--)
+                {
+                    if (array[i] < array[j])
+                    {
+                        char x = array[i];
+                        array[i] = array[j];
+                        array[j] = x;
+                        index = i + 1;
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag)
+                {
+                    while (!swit)
+                    {
+                        swit = true;
+                        for (int counter = index; counter < array.Length - 1; counter++)
+                        {
+                            if (array[counter] > array[counter + 1])
+                            {
+                                swit = false;
+                                char x = array[counter];
+                                array[counter] = array[counter + 1];
+                                array[counter + 1] = x;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            if (flag)
+            {
+                Console.WriteLine(array);
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine(-1);
+            Console.ReadKey();
+            return;
+        }
+    }
+}

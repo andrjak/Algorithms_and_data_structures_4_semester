@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int Y;
+    cin >> Y;
+    if(Y>=2000 && Y<=9999)
+    {
+     if((Y%4 == 0 && Y%100 != 0) || Y%400 == 0)
+     {
+        cout<<"YES";
+     }
+     else
+     {
+        cout<<"NO";
+     }
+    }
+    return 0;
+}

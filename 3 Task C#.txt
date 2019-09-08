@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace ConsoleApp13
+{
+    class Program
+    {
+        static int N;
+        static int K;
+        static int mod = 7 + (int) Math.Pow(10, 9);
+        static void Main(string[] args)
+        {
+            long[] array = Preparation();
+            long result = 1;
+
+            if (array[N - 1] < 0 && K % 2 != 0)
+            {
+                for (int i = N - 1; i >= N - K; i--)
+                    result = (result * array[i]) % mod; 
+            }
+            else
+            {
+                int right;
+                int left = 0;
+                if (K % 2 != 0)
+                {
+                    result = (result * array[N - 1]) % mod;
+                    K--;
+                    right = N - 2;
+                }
+                else right = N - 1;
+
+                K /= 2;
+
+
+                for (int a = 0; a < K; a++)
+                {
+                    if (array[left] * array[left + 1] > array[right] * array[right - 1])
+                    {
+                        long temp = (array[left] * array[left + 1]) % mod;
+                        result = result * temp % mod;
+                        left += 2;
+                    }
+                    else
+                    {
+                        long temp = (array[right] * array[right - 1]) % mod;
+                        result = result * temp % mod;
+                        right -= 2;
+                    }
+                }
+
+            }
+            if (result < 0) result += mod;
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+
+        static long[] Preparation()
+        {
+            int[] NandK = newSplit(Console.ReadLine()).Select(Int32.Parse).ToArray();
+            N = NandK[0];
+            K = NandK[1];
+            long[] array = newSplit(Console.ReadLine()).Select(Int64.Parse).ToArray();
+            Array.Sort(array);
+            return array;
+        }
+    }
+
+}

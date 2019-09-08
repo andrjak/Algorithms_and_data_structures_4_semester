@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp8
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string str = Console.ReadLine();
+            char[] arr = str.ToArray();
+            bool[] intervalArr = new bool[str.Length + 1];
+            bool flag = false;
+
+            int Q = Convert.ToInt32(Console.ReadLine());
+            for (int counter = 0; counter < Q; counter++)
+            {
+                string[] thisStrArr = newSplit(Console.ReadLine());
+                int first = Convert.ToInt32(thisStrArr[0]);
+                int second = Convert.ToInt32(thisStrArr[1]);
+                if (first != second)
+                {
+                    if (first > second)
+                    {
+                        int temp = first;
+                        first = second;
+                        second = temp;
+                    }
+
+                    first--;
+                    intervalArr[first] = !intervalArr[first];
+                    intervalArr[second] = !intervalArr[second];
+                }
+                else
+                {
+                    first--;
+                    if (arr[first] <= 90) arr[first] = Convert.ToChar(Convert.ToInt32(arr[first]) + 32);
+                    else arr[first] = Convert.ToChar(Convert.ToInt32(arr[first]) - 32);
+                }
+            }
+            for (int index = 0; index < str.Length; index++)
+            {
+                if (intervalArr[index]) flag = !flag;
+                if (flag)
+                {
+                    if (arr[index] <= 90) arr[index] = Convert.ToChar(Convert.ToInt32(arr[index]) + 32);
+                    else arr[index] = Convert.ToChar(Convert.ToInt32(arr[index]) - 32);
+                }
+            }
+            Console.WriteLine(new string(arr));
+            Console.ReadKey();
+        }
+
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+    }
+}

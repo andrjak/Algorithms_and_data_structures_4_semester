@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+	long sum = 0;
+	string str;
+	cin >> str;
+	int len = (int)str.size();
+	vector<int> prefix(1 + len);
+	prefix[1] = 0;
+	int subStringLen;
+	int result;
+	for (int i = 1; i < len; i++) {
+    subStringLen = 0;
+    result = 0;
+		for (int j = 1; j < (int)str.size(); j++)
+		{
+			while (true)
+			{
+				if (str[j] == str[subStringLen]) { subStringLen++; break; }
+				if (subStringLen == 0) break;
+				subStringLen = prefix[subStringLen];
+			}
+			prefix[j + 1] = subStringLen;
+			result = max(result, subStringLen);
+		}
+		sum += (long)str.size() - result;
+		str.erase(str.begin());
+	}
+	cout << sum + 1;
+	system("pause");
+	return 0;
+}

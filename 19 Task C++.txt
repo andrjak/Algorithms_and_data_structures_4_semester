@@ -1,0 +1,76 @@
+#include <iostream>
+
+using namespace std;
+
+long MAINCOUNTER = 0;
+
+void mergeSort(int *mainArr, int len);
+
+int main()
+{
+	int N;
+	cin >> N;
+	int number;
+	int *numbersArr = new int[N];
+
+	for (int *index = numbersArr; index != numbersArr + N; index++)
+	{
+		cin >> *index;
+	}
+	mergeSort(numbersArr, N);
+
+	cout << MAINCOUNTER;
+}
+
+void mergeSort(int *mainArr, int len)
+{
+	if (len == 1)
+	{
+		return;
+	}
+
+	int leftArrLen = len / 2;
+	int *leftArr = new int[leftArrLen];
+	for (int index = 0; index < leftArrLen; index++)
+	{
+		leftArr[index] = mainArr[index];
+	}
+
+	int rightArrLen = len - leftArrLen;
+	int *rightArr = new int[rightArrLen];
+	for (int index = leftArrLen; index < len; index++)
+	{
+		rightArr[index - leftArrLen] = mainArr[index];
+	}
+
+	mergeSort(leftArr, leftArrLen);
+	mergeSort(rightArr, rightArrLen);
+	int leftItem = 0, reightItem = 0;
+
+	while (leftItem < leftArrLen && reightItem < rightArrLen)
+	{
+		if (leftArr[leftItem] <= rightArr[reightItem])
+		{
+			mainArr[leftItem + reightItem] = leftArr[leftItem];
+			++leftItem;
+		}
+		else
+		{
+			MAINCOUNTER += (long)(leftArrLen - leftItem);
+			mainArr[leftItem + reightItem] = rightArr[reightItem];
+			++reightItem;
+		}
+	}
+	while (leftItem < leftArrLen)
+	{
+		mainArr[leftItem + reightItem] = leftArr[leftItem];
+		++leftItem;
+	}
+	while (reightItem < rightArrLen)
+	{
+		mainArr[leftItem + reightItem] = rightArr[reightItem];
+		++reightItem;
+	}
+	delete leftArr;
+	delete rightArr;
+}

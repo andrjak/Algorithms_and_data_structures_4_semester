@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+
+
+namespace testTaskC
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int N = Convert.ToInt32(Console.ReadLine());
+            if (N >= 2 && N <= 100000)
+            {
+                string itemList = Console.ReadLine();
+                if (N == newSplit(itemList).Length)
+                {
+                    Int64 first = 0, second = 0;
+                    Int64 _first = 0, _second = 0;
+                    string[] mas = newSplit(itemList);
+                    if (N == 2)
+                    {
+                        Console.WriteLine(Convert.ToInt64(mas[0]) * Convert.ToInt64(mas[1]));
+                    }
+                    else
+                    {
+                        foreach (var item in newSplit(itemList))
+                        {
+                            if (Convert.ToInt32(item) >= 0)
+                            {
+                                if (Convert.ToInt32(item) >= first)
+                                {
+                                    second = first;
+                                    first = Convert.ToInt32(item);
+                                }
+                                else if (Convert.ToInt32(item) > second) second = Convert.ToInt32(item);
+                            }
+                            else
+                            {
+                                if (Math.Abs(Convert.ToInt32(item)) >= _first)
+                                {
+                                    _second = _first;
+                                    _first = Math.Abs(Convert.ToInt32(item));
+                                }
+                                else if (Math.Abs(Convert.ToInt32(item)) > _second) _second = Math.Abs(Convert.ToInt32(item));
+                            }
+                        }
+                        if (first * second >= _first * _second)
+                        {
+                            Console.WriteLine(first * second);
+                        }
+                        else
+                        {
+                            Console.WriteLine(_first * _second);
+                        }
+                    }
+                }
+                Console.ReadKey();
+            }
+        }
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+    }
+}

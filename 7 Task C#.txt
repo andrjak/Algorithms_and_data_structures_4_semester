@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ConsoleApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] mas = newSplit(Console.ReadLine());
+            Int64 N = Convert.ToInt64(mas[0]);
+            Int64 M = Convert.ToInt64(mas[1]);
+            Int64 X1 = Convert.ToInt64(mas[2]);
+            Int64 Y1 = Convert.ToInt64(mas[3]);
+            Int64 X2 = Convert.ToInt64(mas[4]);
+            Int64 Y2 = Convert.ToInt64(mas[5]);
+            if (Math.Abs(X1-X2) == Math.Abs(Y1-Y2))
+            {
+                Console.WriteLine("No");
+            }
+            else
+            {
+                Console.WriteLine("Yes");
+            }
+            Console.ReadKey();
+        }
+
+        static string[] newSplit(string text)
+        {
+            int index;
+            int lastIndex = 0;
+            List<string> words = new List<string>();
+            while ((index = text.IndexOf(' ', lastIndex)) != -1)
+            {
+                words.Add(text.Substring(lastIndex, index - lastIndex));
+                lastIndex = index + 1;
+            }
+            words.Add(text.Substring(lastIndex));
+            return words.ToArray();
+        }
+    }
+}

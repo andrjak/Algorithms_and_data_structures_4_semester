@@ -1,0 +1,42 @@
+#include "stdafx.h"
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	bool selector[8]{ false, false, false, false, false, false, false, false };
+	int N;
+	cin >> N;
+	int *mas = new int[N];
+	if (N >= 1 && N <= 100000)
+	{
+		for (int *i = mas; i != mas + N; i++)
+		{
+			cin >> *i;
+		}
+
+		for (int *i = mas; i != mas + N; i++)
+		{
+			if (*i == 1021) selector[0] = true;
+			else if (*i == 1031) selector[1] = true;
+			else if (*i == 1033) selector[2] = true;
+			else if (*i == 1052651) selector[3] = true;
+			else if (*i == 1054693) selector[4] = true;
+			else if (*i == 1065023) selector[5] = true;
+			else if (*i == 1087388483) selector[6] = true;
+			else if (*i == 1) selector[7] = true;
+		}
+		if ((selector[0] && selector[1] && selector[2]) || (selector[2] && selector[3])
+			|| (selector[1] && selector[4]) || (selector[0] && selector[5]) || (selector[6] && selector[7])
+			|| selector[6])
+		{
+			cout << "YES";
+		}
+		else
+		{
+			cout << "NO";
+		}
+	}
+	return 0;
+}

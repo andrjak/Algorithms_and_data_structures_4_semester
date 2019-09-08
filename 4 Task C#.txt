@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp10
+{
+    class Program
+    {
+        static int result = -1;
+        static int N, M;
+        static int I, J;
+        static Queue<int[]> steps = new Queue<int[]>();
+        static void Main(string[] args)
+        {
+            steps.Enqueue(new int[] { 0, 0, 0 });
+            int[] init = Console.ReadLine().Split().Select(Int32.Parse).ToArray();
+            N = --init[0];
+            M = --init[1];
+            I = --init[2];
+            J = --init[3];
+            bool[][] chessboard = new bool[N + 1][];
+            for (int i = 0; i <= N; i++) chessboard[i] = new bool[M + 1];
+
+            while (steps.Count != 0)
+            {
+                int[] thisStep = steps.Dequeue();
+                if (chessboard[thisStep[0]][thisStep[1]]) continue;
+                chessboard[thisStep[0]][thisStep[1]] = true;
+                Step(chessboard, thisStep);
+                if (result != -1) break;
+            }
+            if (result != -1) Console.WriteLine(result);
+            else Console.WriteLine("NEVAR");
+            Console.ReadKey();
+        }
+
+        static void Step(bool[][] chessboard, int[] tuple)
+        {
+
+            if (tuple[0] == I && tuple[1] == J)
+            {
+                result = tuple[2];
+                return;
+            }
+
+            // В верх в право
+            if (tuple[0] + 1 <= N && tuple[1] + 2 <= M && tuple[0] + 1 >= 0 && tuple[1] + 2 >= 0)
+            {
+                if (!chessboard[tuple[0] + 1][tuple[1] + 2])
+                    steps.Enqueue(new int[] { tuple[0] + 1, tuple[1] + 2, tuple[2] + 1 });
+            }
+            // В верх в лево
+            if (tuple[0] - 1 <= N && tuple[1] + 2 <= M && tuple[0] - 1 >= 0 && tuple[1] + 2 >= 0)
+            {
+                if (!chessboard[tuple[0] - 1][tuple[1] + 2])
+                    steps.Enqueue(new int[] { tuple[0] - 1, tuple[1] + 2, tuple[2] + 1 });
+            }
+            // В низ в право 
+            if (tuple[0] + 1 <= N && tuple[1] - 2 <= M && tuple[0] + 1 >= 0 && tuple[1] - 2 >= 0)
+            {
+                if (!chessboard[tuple[0] + 1][tuple[1] - 2])
+                    steps.Enqueue(new int[] { tuple[0] + 1, tuple[1] - 2, tuple[2] + 1 });
+            }
+            // В низ в лево
+            if (tuple[0] - 1 <= N && tuple[1] - 2 <= M && tuple[0] - 1 >= 0 && tuple[1] - 2 >= 0)
+            {
+                if (!chessboard[tuple[0] - 1][tuple[1] - 2])
+                    steps.Enqueue(new int[] { tuple[0] - 1, tuple[1] - 2, tuple[2] + 1 });
+            }
+
+            // В право в верх
+            if (tuple[0] + 2 <= N && tuple[1] + 1 <= M && tuple[0] + 2 >= 0 && tuple[1] + 1 >= 0)
+            {
+                if (!chessboard[tuple[0] + 2][tuple[1] + 1])
+                    steps.Enqueue(new int[] { tuple[0] + 2, tuple[1] + 1, tuple[2] + 1 });
+            }
+            // В право в низ
+            if (tuple[0] + 2 <= N && tuple[1] - 1 <= M && tuple[0] + 2 >= 0 && tuple[1] - 1 >= 0)
+            {
+                if (!chessboard[tuple[0] + 2][tuple[1] - 1])
+                    steps.Enqueue(new int[] { tuple[0] + 2, tuple[1] - 1, tuple[2] + 1 });
+            }
+            // В лево в верх
+            if (tuple[0] - 2 <= N && tuple[1] + 1 <= M && tuple[0] - 2 >= 0 && tuple[1] + 1 >= 0)
+            {
+                if (!chessboard[tuple[0] - 2][tuple[1] + 1])
+                    steps.Enqueue(new int[] { tuple[0] - 2, tuple[1] + 1, tuple[2] + 1 });
+            }
+            // В лево в низ
+            if (tuple[0] - 2 <= N && tuple[1] - 1 <= M && tuple[0] - 2 >= 0 && tuple[1] - 1 >= 0)
+            {
+                if (!chessboard[tuple[0] - 2][tuple[1] - 1])
+                    steps.Enqueue(new int[] { tuple[0] - 2, tuple[1] - 1, tuple[2] + 1 });
+            }
+        }
+    }
+}
+
